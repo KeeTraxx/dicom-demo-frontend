@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import './Patients.css';
+import axios from 'axios';
 
 interface Patient {
   id: string;
@@ -11,13 +12,20 @@ function Patients() {
   const [patients, setPatients] = useState<Patient[]>([])
 
   useEffect(() => {
-    // TODO axios here
-    setPatients([
-      {
-        id: '1',
-        name: 'John Doe'
-      }
-    ]);
+    (async () => {
+      const response = await axios.post('http://localhost:4000', {
+        query: `
+          query ExampleQuery {
+            patients {
+              createdAt
+              id
+              name
+            }
+          }`
+      });
+      console.log(response.data.data.patients);
+      setPatients(response.data.data.patients);
+    })();
   }, []);
 
   return (
