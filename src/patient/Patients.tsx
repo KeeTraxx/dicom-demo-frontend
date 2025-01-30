@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
+import { gql } from '../helper/graphql';
 import './Patients.css';
-import axios from 'axios';
-
-interface Patient {
-  id: string;
-  name: string;
-}
+import { Patient } from './types';
 
 function Patients() {
   const [patients, setPatients] = useState<Patient[]>([])
 
   useEffect(() => {
     (async () => {
-      const response = await axios.post('http://localhost:4000', {
-        query: `
-          query ExampleQuery {
-            patients {
-              createdAt
-              id
-              name
-            }
-          }`
-      });
-      console.log(response.data.data.patients);
-      setPatients(response.data.data.patients);
+      const patientsReponse = await gql(`
+        {
+          patients {
+            id
+            name
+            birthDate
+            sex
+            age
+            weight
+            createdAt
+          }
+        }
+    `);
+      setPatients(patientsReponse.patients);
     })();
   }, []);
 
@@ -37,6 +35,7 @@ function Patients() {
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>DOB</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -45,6 +44,7 @@ function Patients() {
               <tr key={patient.id}>
                 <td>{patient.id}</td>
                 <td>{patient.name}</td>
+                <td>{new Date(patient.birthDate).toDateString()}</td>
                 <td><NavLink to={`/patient/${patient.id}`}>🔍</NavLink></td>
               </tr>
             ))}

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router'
 import Patients from './patient/Patients'
 import Upload from './upload/Upload'
+import Patient from './patient/Patient'
 
 function AppRoutes() {
 
@@ -8,6 +9,7 @@ function AppRoutes() {
     <>
       <Routes>
         <Route path="/" element={<Patients />} />
+        <Route path="/patient/:patientId" element={<Patient />} />
         <Route path="/upload" element={<Upload />} />
       </Routes>
     </>
