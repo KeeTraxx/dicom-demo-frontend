@@ -17,13 +17,6 @@ function DicomPreview({ dicomFile }: DicomPreviewProps) {
             // get the DCM image
             const image = dicomts.parseImage(new DataView(response.data).buffer);
 
-            // access any tags needed, common ones have parameters
-            console.log("PatientID:", image?.patientID);
-            // or use the DICOM tag group, element id pairs
-            console.log("PatientName:", image?.getTagValue([0x0010, 0x0010]));
-
-            // create the renderer (keeping hold of an instance for the canvas can
-            // improve 2nd image decode performance hugely - see examples)
             const renderer = new dicomts.Renderer(canvasRef.current);
 
             // decode, and display frame 0 on the canvas
